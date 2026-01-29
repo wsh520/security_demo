@@ -1,6 +1,6 @@
 package com.wl.security_demo.security;
 
-import com.wl.security_demo.controller.TestController;
+import com.wl.security_demo.cache.DataCache;
 import com.wl.security_demo.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class LogoutHandlerImpl implements LogoutHandler {
             Claims claims = JwtUtils.parseToken(token);
             String userName = claims.getSubject();
             // 缓存中删除
-            TestController.TOKEN_STORE.remove(userName);
+            DataCache.TOKEN_STORE.remove(userName);
         }
     }
 }

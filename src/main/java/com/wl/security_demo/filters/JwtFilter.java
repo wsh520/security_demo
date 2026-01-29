@@ -1,11 +1,12 @@
 package com.wl.security_demo.filters;
 
-import com.wl.security_demo.controller.TestController;
+import com.wl.security_demo.cache.DataCache;
 import com.wl.security_demo.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class JwtFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
@@ -32,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 var claims = JwtUtils.parseToken(token);
                 String username = claims.getSubject();
 
-                String effectToken = TestController.TOKEN_STORE.get(username);
+                String effectToken = DataCache.TOKEN_STORE.get(username);
                 if (!token.equals(effectToken) || JwtUtils.tokenExpired(claims)) {
                     throw new RuntimeException("Token 已被注销");
                 }

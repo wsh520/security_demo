@@ -1,6 +1,6 @@
 package com.wl.security_demo.service.impl;
 
-import com.wl.security_demo.controller.TestController;
+import com.wl.security_demo.cache.DataCache;
 import com.wl.security_demo.vo.SysUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1. 模拟从数据库查询用户
-        SysUser user = TestController.MOCK_DB.get(username);
+        SysUser user = DataCache.MOCK_DB.get(username);
 
         // 2. 如果查不到用户，必须抛出这个异常
         if (user == null) {
