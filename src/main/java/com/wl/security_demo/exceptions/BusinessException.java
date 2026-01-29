@@ -1,7 +1,13 @@
 package com.wl.security_demo.exceptions;
 
+import lombok.Getter;
+
+import java.io.Serial;
+
+@Getter
 public class BusinessException extends RuntimeException {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -24,10 +30,6 @@ public class BusinessException extends RuntimeException {
     public BusinessException(int code, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public static BusinessException of(String message) {

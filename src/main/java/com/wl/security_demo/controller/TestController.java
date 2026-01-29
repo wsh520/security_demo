@@ -4,7 +4,7 @@ import com.wl.security_demo.cache.DataCache;
 import com.wl.security_demo.exceptions.BusinessException;
 import com.wl.security_demo.utils.JwtUtils;
 import com.wl.security_demo.vo.SysUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -22,10 +21,10 @@ import java.util.stream.Collectors;
 @RestController
 public class TestController {
 
-    @Autowired
+    @Resource
     private AuthenticationManager authenticationManager;
 
-    @Autowired
+    @Resource
     private PasswordEncoder passwordEncoder;
 
 

@@ -1,6 +1,5 @@
 package com.wl.security_demo.security;
 
-import com.wl.security_demo.controller.TestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
