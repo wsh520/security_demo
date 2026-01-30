@@ -46,8 +46,8 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout") // 登出接口路径
-                        .addLogoutHandler(logoutHandler)
-                        .logoutSuccessHandler(logoutSuccessHandler)
+                        .addLogoutHandler(logoutHandler) // 登出逻辑处理器，比如处理token注销
+                        .logoutSuccessHandler(logoutSuccessHandler) // 登出成功处理器,统一返回格式
                 )
                 // 关键：在用户名密码过滤器之前添加我们的 JWT 过滤器
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

@@ -80,7 +80,7 @@ public class TestController {
     @PreAuthorize("hasAuthority('system:user:query')")
     public String queryUser() {
 
-        throw new BusinessException("查询出错了！");
+        throw new BusinessException("查询出错了！"); // 错误模拟，依靠全局异常处理器处理，正确抛出异常
 //        return "查询用户成功！";
     }
 
