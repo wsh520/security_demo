@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
         LOGGER.error("业务异常: {}", e.getMessage());
 
-        return AjaxResult.error(500, e.getMessage());
+        return AjaxResult.error(e.getCode(), e.getMessage());
     }
 
     // 处理权限不足异常 (@PreAuthorize 抛出的)
