@@ -1,6 +1,5 @@
 package com.wl.security_demo.filters;
 
-import com.wl.security_demo.cache.DataCache;
 import com.wl.security_demo.utils.JwtUtils;
 import com.wl.security_demo.utils.RedisCacheUtils;
 import jakarta.annotation.Resource;
