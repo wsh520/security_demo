@@ -13,4 +13,9 @@ public class AjaxResult {
     public static AjaxResult error(int code, String msg) {
         return new AjaxResult(code, msg, null);
     }
+
+
+    public static AjaxResult success( String msg,Object data) {
+        return new AjaxResult(200, msg, data);
+    }
 }

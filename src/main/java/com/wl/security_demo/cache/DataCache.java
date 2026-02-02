@@ -26,6 +26,5 @@ public class DataCache {
                 List.of("system:user:query","system:user:delete")));
     }
 
-    public static Map<String,String> TOKEN_STORE = new HashMap<>();
 
 }

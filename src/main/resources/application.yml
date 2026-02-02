@@ -1,0 +1,37 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8080
+#logging.level.org.springframework.security=DEBUG
+spring:
+  # --- 数据库配置 ---
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.98.104.35:3306/security_permission?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+  # --- Redis 配置 ---
+  data:
+    redis:
+      host: 47.98.104.35
+      port: 6379
+      password:  # 如果没有密码留空
+      database: 0
+      # 连接池配置 (依赖 commons-pool2)
+      lettuce:
+        pool:
+          max-active: 8  # 最大连接数
+          max-wait: -1ms # 最大阻塞等待时间
+          max-idle: 8    # 最大空闲连接
+          min-idle: 0    # 最小空闲连接
+      timeout: 3000ms # 连接超时时间
+
+# --- MyBatis-Plus 配置 ---
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml # Mapper XML 扫描路径
+  configuration:
+    map-underscore-to-camel-case: true # 开启驼峰命名自动映射
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开发环境打印 SQL 日志
+  global-config:
+    db-config:
+      id-type: auto # 全局主键策略 (例如数据库自增)

@@ -2,6 +2,8 @@ package com.wl.security_demo.filters;
 
 import com.wl.security_demo.cache.DataCache;
 import com.wl.security_demo.utils.JwtUtils;
+import com.wl.security_demo.utils.RedisCacheUtils;
+import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +21,9 @@ import java.util.stream.Collectors;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    @Resource
+    private RedisCacheUtils redisCacheUtils;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws ServletException, IOException {
@@ -33,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 var claims = JwtUtils.parseToken(token);
                 String username = claims.getSubject();
 
-                String effectToken = DataCache.TOKEN_STORE.get(username);
+                String effectToken = redisCacheUtils.getCacheObject(username);
                 if (!token.equals(effectToken) || JwtUtils.tokenExpired(claims)) {
                     throw new RuntimeException("Token 已被注销");
                 }

@@ -1,8 +1,15 @@
 package com.wl.security_demo.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wl.security_demo.cache.DataCache;
+import com.wl.security_demo.common.AjaxResult;
+import com.wl.security_demo.domain.entity.User;
 import com.wl.security_demo.exceptions.BusinessException;
+import com.wl.security_demo.params.LoginUser;
+import com.wl.security_demo.params.RegisterUser;
+import com.wl.security_demo.service.UserService;
 import com.wl.security_demo.utils.JwtUtils;
+import com.wl.security_demo.utils.RedisCacheUtils;
 import com.wl.security_demo.vo.SysUser;
 import jakarta.annotation.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,30 +34,43 @@ public class TestController {
     @Resource
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private RedisCacheUtils redisCacheUtils;
+
+    @Resource
+    private UserService userService;
+
     @PostMapping("/register")
-    public Map<String, Object> register(@RequestBody Map<String, String> user) {
-        String username = user.get("username");
-        String password = user.get("password");
-        String strRoles = user.get("roles");
+    public AjaxResult register(@RequestBody RegisterUser registerUser) {
+        String username = registerUser.getUserName();
+        String password = registerUser.getPassword();
 
         // 1. 校验用户是否已存在
-        if (DataCache.MOCK_DB.containsKey(username)) {
-            return Map.of("code", 400, "msg", "用户名已存在");
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUserName, username);
+
+        if (userService.exists(wrapper)) {
+            return AjaxResult.error( 400,  "用户名已存在");
         }
 
         // 2. 【核心】加密密码，绝对不能明文存储
         String encodePassword = passwordEncoder.encode(password);
 
         // 3. 存入数据库 (模拟)
-        DataCache.MOCK_DB.put(username, new SysUser(1L, username, encodePassword, Arrays.stream(strRoles.split(",")).toList()));
+        User user = new User();
+        user.setUserName(username);
+        user.setPassword(encodePassword);
+        user.setNickName(registerUser.getNickName());
+        user.setDeptId(registerUser.getDeptId());
+        userService.save(user);
 
-        return Map.of("code", 200, "msg", "注册成功");
+        return AjaxResult.success("注册成功", null);
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, String> body) {
+    public AjaxResult login(@RequestBody LoginUser loginParam) {
         // 1. 验证账号密码
-        var authRequest = new UsernamePasswordAuthenticationToken(body.get("username"), body.get("password"));
+        var authRequest = new UsernamePasswordAuthenticationToken(loginParam.getUsername(), loginParam.getPassword());
         Authentication auth = authenticationManager.authenticate(authRequest);
 
         // 2. 获取该用户的权限列表
@@ -61,10 +81,8 @@ public class TestController {
         // 3. 生成 JWT
         String token = JwtUtils.createToken(auth.getName(), authorities);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("token", "Bearer " + token); // 加上 Bearer 前缀规范
-        DataCache.TOKEN_STORE.put(body.get("username"), token);
-        return result;
+        redisCacheUtils.setCacheObjectDefaultExpire(loginParam.getUsername(), token);
+        return AjaxResult.success("登录成功", token);
     }
 
     /**
