@@ -3,7 +3,7 @@
 <mapper namespace="com.wl.security_demo.mapper.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.wl.security_demo.domain.entity.User">
+    <resultMap id="BaseResultMap" type="com.wl.security_demo.domain.entity.UserDO">
         <id column="user_id" property="userId" />
         <result column="dept_id" property="deptId" />
         <result column="user_name" property="userName" />

@@ -3,7 +3,7 @@
 <mapper namespace="com.wl.security_demo.mapper.RoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.wl.security_demo.domain.entity.Role">
+    <resultMap id="BaseResultMap" type="com.wl.security_demo.domain.entity.RoleDO">
         <id column="role_id" property="roleId" />
         <result column="role_name" property="roleName" />
         <result column="role_key" property="roleKey" />

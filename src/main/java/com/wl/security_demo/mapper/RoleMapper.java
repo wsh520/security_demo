@@ -1,6 +1,6 @@
 package com.wl.security_demo.mapper;
 
-import com.wl.security_demo.domain.entity.Role;
+import com.wl.security_demo.domain.entity.RoleDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2026-02-02
  */
 @Mapper
-public interface RoleMapper extends BaseMapper<Role> {
+public interface RoleMapper extends BaseMapper<RoleDO> {
 
 }

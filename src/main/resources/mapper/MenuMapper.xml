@@ -3,7 +3,7 @@
 <mapper namespace="com.wl.security_demo.mapper.MenuMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.wl.security_demo.domain.entity.Menu">
+    <resultMap id="BaseResultMap" type="com.wl.security_demo.domain.entity.MenuDO">
         <id column="menu_id" property="menuId" />
         <result column="menu_name" property="menuName" />
         <result column="parent_id" property="parentId" />

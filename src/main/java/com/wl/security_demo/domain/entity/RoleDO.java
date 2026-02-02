@@ -12,7 +12,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * 用户信息表
+ * 角色信息表
  * </p>
  *
  * @author wangl
@@ -20,43 +20,43 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_user")
-public class User implements Serializable {
+@TableName("sys_role")
+public class RoleDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 用户ID
+     * 角色ID
      */
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private Long userId;
+    @TableId(value = "role_id", type = IdType.AUTO)
+    private Long roleId;
 
     /**
-     * 部门ID
+     * 角色名称
      */
-    @TableField("dept_id")
-    private Long deptId;
+    @TableField("role_name")
+    private String roleName;
 
     /**
-     * 用户账号
+     * 角色权限字符串 (如 admin)
      */
-    @TableField("user_name")
-    private String userName;
+    @TableField("role_key")
+    private String roleKey;
 
     /**
-     * 用户昵称
+     * 显示顺序
      */
-    @TableField("nick_name")
-    private String nickName;
+    @TableField("role_sort")
+    private Integer roleSort;
 
     /**
-     * 密码
+     * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）
      */
-    @TableField("password")
-    private String password;
+    @TableField("data_scope")
+    private String dataScope;
 
     /**
-     * 帐号状态（0正常 1停用）
+     * 角色状态（0正常 1停用）
      */
     @TableField("status")
     private String status;
@@ -67,18 +67,6 @@ public class User implements Serializable {
     @TableField("del_flag")
     @TableLogic
     private String delFlag;
-
-    /**
-     * 最后登录IP
-     */
-    @TableField("login_ip")
-    private String loginIp;
-
-    /**
-     * 最后登录时间
-     */
-    @TableField("login_date")
-    private LocalDateTime loginDate;
 
     /**
      * 创建时间

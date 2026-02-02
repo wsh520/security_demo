@@ -1,6 +1,6 @@
 package com.wl.security_demo.service;
 
-import com.wl.security_demo.domain.entity.Menu;
+import com.wl.security_demo.domain.entity.MenuDO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author wangl
  * @since 2026-02-02
  */
-public interface MenuService extends IService<Menu> {
+public interface MenuService extends IService<MenuDO> {
 
 }

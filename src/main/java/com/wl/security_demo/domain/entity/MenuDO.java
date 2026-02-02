@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_menu")
-public class Menu implements Serializable {
+public class MenuDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

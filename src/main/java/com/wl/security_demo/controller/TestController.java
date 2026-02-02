@@ -1,16 +1,14 @@
 package com.wl.security_demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.wl.security_demo.cache.DataCache;
 import com.wl.security_demo.common.AjaxResult;
-import com.wl.security_demo.domain.entity.User;
+import com.wl.security_demo.domain.entity.UserDO;
 import com.wl.security_demo.exceptions.BusinessException;
 import com.wl.security_demo.params.LoginUser;
 import com.wl.security_demo.params.RegisterUser;
 import com.wl.security_demo.service.UserService;
 import com.wl.security_demo.utils.JwtUtils;
 import com.wl.security_demo.utils.RedisCacheUtils;
-import com.wl.security_demo.vo.SysUser;
 import jakarta.annotation.Resource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,10 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import java.util.Arrays;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,8 +42,8 @@ public class TestController {
         String password = registerUser.getPassword();
 
         // 1. 校验用户是否已存在
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getUserName, username);
+        LambdaQueryWrapper<UserDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserDO::getUserName, username);
 
         if (userService.exists(wrapper)) {
             return AjaxResult.error( 400,  "用户名已存在");
@@ -57,7 +53,7 @@ public class TestController {
         String encodePassword = passwordEncoder.encode(password);
 
         // 3. 存入数据库 (模拟)
-        User user = new User();
+        UserDO user = new UserDO();
         user.setUserName(username);
         user.setPassword(encodePassword);
         user.setNickName(registerUser.getNickName());
