@@ -1,5 +1,6 @@
 package com.wl.security_demo.utils;
 
+import com.wl.security_demo.exceptions.BusinessException;
 import io.jsonwebtoken.*;
 import java.util.Date;
 import java.util.List;
@@ -20,10 +21,18 @@ public class JwtUtils {
 
     // 解析 Token
     public static Claims parseToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token)
-                .getBody();
+
+        Claims claims;
+        try {
+            claims  = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            throw new BusinessException(500,"登录已失效，请重新登录");
+        }
+
+        return claims;
     }
 
     public static Boolean tokenExpired(Claims claims) {
