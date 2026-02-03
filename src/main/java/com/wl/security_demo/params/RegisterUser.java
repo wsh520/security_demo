@@ -13,6 +13,6 @@ public class RegisterUser {
 
     private String password;
 
-    private Long deptId;
+    private String email;
 
 }

@@ -32,8 +32,8 @@ public class CodeGenerator {
                 })
                 // --- 策略配置 (核心) ---
                 .strategyConfig(builder -> {
-                    builder.addInclude("sys_user", "sys_role", "sys_menu") // 设置需要生成的表名
-                            .addTablePrefix("sys_"); // 设置过滤表前缀 (生成的类名将不包含 sys_)
+                    builder.addInclude("sys_user", "sys_role", "sys_permission","sys_user_role","sys_role_permission"); // 设置需要生成的表名
+//                            .addTablePrefix("sys_"); // 设置过滤表前缀 (生成的类名将不包含 sys_)
 
                     // 1. Entity (DO) 策略
                     builder.entityBuilder()
@@ -54,8 +54,8 @@ public class CodeGenerator {
                             .formatServiceImplFileName("%sServiceImpl");
 
                     // 4. Controller 策略 (如不需要可注释掉)
-                    builder.controllerBuilder()
-                            .enableRestStyle(); // 开启 @RestController
+//                    builder.controllerBuilder()
+//                            .enableRestStyle(); // 开启 @RestController
                 })
                 // 使用 Velocity 引擎
                 .templateEngine(new VelocityTemplateEngine())

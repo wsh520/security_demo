@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wl.security_demo.mapper.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wl.security_demo.domain.entity.SysUser">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="nickname" property="nickname" />
+        <result column="email" property="email" />
+        <result column="status" property="status" />
+        <result column="create_user" property="createUser" />
+        <result column="create_time" property="createTime" />
+        <result column="update_user" property="updateUser" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="queryUserRoleAndPremiss" resultType="java.lang.String">
+            SELECT CONCAT('ROLE_', sr.role_name) AS authority
+            FROM sys_user_role sur
+            JOIN sys_role sr ON sur.role_id = sr.id
+            WHERE sur.user_id = #{userId}
+     UNION ALL
+            SELECT sp.code as authority
+            FROM sys_user_role sur
+            JOIN sys_role_permission srp ON sur.role_id = srp.role_id
+            JOIN sys_permission sp ON srp.permission_id = sp.id
+            WHERE sur.user_id = #{userId}
+    </select>
+</mapper>

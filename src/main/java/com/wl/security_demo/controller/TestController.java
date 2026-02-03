@@ -2,11 +2,11 @@ package com.wl.security_demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wl.security_demo.common.AjaxResult;
-import com.wl.security_demo.domain.entity.UserDO;
+import com.wl.security_demo.domain.entity.SysUser;
 import com.wl.security_demo.exceptions.BusinessException;
 import com.wl.security_demo.params.LoginUser;
 import com.wl.security_demo.params.RegisterUser;
-import com.wl.security_demo.service.UserService;
+import com.wl.security_demo.service.SysUserService;
 import com.wl.security_demo.utils.JwtUtils;
 import com.wl.security_demo.utils.RedisCacheUtils;
 import jakarta.annotation.Resource;
@@ -34,7 +34,7 @@ public class TestController {
     private RedisCacheUtils redisCacheUtils;
 
     @Resource
-    private UserService userService;
+    private SysUserService sysUserService;
 
     @PostMapping("/register")
     public AjaxResult register(@RequestBody RegisterUser registerUser) {
@@ -42,10 +42,10 @@ public class TestController {
         String password = registerUser.getPassword();
 
         // 1. 校验用户是否已存在
-        LambdaQueryWrapper<UserDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserDO::getUserName, username);
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getUsername, username);
 
-        if (userService.exists(wrapper)) {
+        if (sysUserService.exists(wrapper)) {
             return AjaxResult.error( 400,  "用户名已存在");
         }
 
@@ -53,12 +53,12 @@ public class TestController {
         String encodePassword = passwordEncoder.encode(password);
 
         // 3. 存入数据库 (模拟)
-        UserDO user = new UserDO();
-        user.setUserName(username);
+        SysUser user = new SysUser();
+        user.setUsername(username);
         user.setPassword(encodePassword);
-        user.setNickName(registerUser.getNickName());
-        user.setDeptId(registerUser.getDeptId());
-        userService.save(user);
+        user.setNickname(registerUser.getNickName());
+        user.setEmail(registerUser.getEmail());
+        sysUserService.save(user);
 
         return AjaxResult.success("注册成功", null);
     }
@@ -86,7 +86,7 @@ public class TestController {
      * admin 和 zhangsan 都能访问
      */
     @GetMapping("/user/query")
-    @PreAuthorize("hasAuthority('system:user:query')")
+    @PreAuthorize("hasAuthority('system:user:query') AND hasAnyRole('ADMIN','USER')")
     public String queryUser() {
 
         throw new BusinessException("查询出错了！"); // 错误模拟，依靠全局异常处理器处理，正确抛出异常
