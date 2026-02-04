@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class BasePageParam {
 
-    private Integer pageNum;
+    private Integer pageNum = 1;
 
-    private  Integer pageSize;
+    private  Integer pageSize = 10;
 
 }

@@ -3,7 +3,7 @@ package com.wl.security_demo.params;
 import lombok.Data;
 
 @Data
-public class LoginUser {
+public class LoginUserParam {
 
     private String username;
 

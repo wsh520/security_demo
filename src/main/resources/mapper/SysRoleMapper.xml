@@ -20,4 +20,10 @@
         id, role_name, role_code, role_description, create_user, create_time, update_user, update_time, data_scope
     </sql>
 
+    <select id="queryUserRoleKeys" resultType="java.lang.String">
+        SELECT distinct r.role_code
+        FROM sys_user_role ur
+        LEFT JOIN sys_role r ON ur.role_id = r.id
+        WHERE ur.user_id = #{userId}
+    </select>
 </mapper>

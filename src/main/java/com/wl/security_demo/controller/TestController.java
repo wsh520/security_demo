@@ -5,7 +5,7 @@ import com.wl.security_demo.common.PageResult;
 import com.wl.security_demo.common.Result;
 import com.wl.security_demo.domain.entity.SysUser;
 import com.wl.security_demo.exceptions.BusinessException;
-import com.wl.security_demo.params.LoginUser;
+import com.wl.security_demo.params.LoginUserParam;
 import com.wl.security_demo.params.OrderParam;
 import com.wl.security_demo.params.RegisterUser;
 import com.wl.security_demo.service.BizOrderService;
@@ -71,7 +71,7 @@ public class TestController {
     }
 
     @PostMapping("/login")
-    public Result<String> login(@RequestBody LoginUser loginParam) {
+    public Result<String> login(@RequestBody LoginUserParam loginParam) {
         // 1. 验证账号密码
         var authRequest = new UsernamePasswordAuthenticationToken(loginParam.getUsername(), loginParam.getPassword());
         Authentication auth = authenticationManager.authenticate(authRequest);
