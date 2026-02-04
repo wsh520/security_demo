@@ -1,5 +1,6 @@
 package com.wl.security_demo.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wl.security_demo.domain.entity.SysUser;
 import com.wl.security_demo.mapper.SysPermissionMapper;
@@ -7,6 +8,7 @@ import com.wl.security_demo.mapper.SysRoleMapper;
 import com.wl.security_demo.service.SysPermissionService;
 import com.wl.security_demo.service.SysRoleService;
 import com.wl.security_demo.service.SysUserService;
+import com.wl.security_demo.utils.RedisCacheUtils;
 import com.wl.security_demo.vo.LoginUser;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,6 +36,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private SysPermissionService sysPermissionService;
 
 
+    @Resource
+    private RedisCacheUtils redisCacheUtils;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1. 从数据库查询用户
@@ -59,7 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         loginUser.setDeptId(sysUser.getDeptId());
         loginUser.setRoles(roles);
         loginUser.setPermissions(perms);
-
+        redisCacheUtils.setCacheObjectDefaultExpire("login:"+username, JSON.toJSONString(loginUser));
         return loginUser;
 
     }

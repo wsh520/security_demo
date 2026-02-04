@@ -26,6 +26,7 @@ public class LogoutHandlerImpl implements LogoutHandler {
             Claims claims = JwtUtils.parseToken(token);
             String userName = claims.getSubject();
             redisCacheUtils.deleteObject(userName);
+            redisCacheUtils.deleteObject("login:" + userName);
         }
     }
 }
