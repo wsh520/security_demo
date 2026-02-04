@@ -1,6 +1,6 @@
 package com.wl.security_demo.exceptions;
 
-import com.wl.security_demo.common.AjaxResult;
+import com.wl.security_demo.common.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,37 +17,37 @@ public class GlobalExceptionHandler {
 
     // 1. 处理业务异常 (你的自定义异常)
     @ExceptionHandler(BusinessException.class)
-    public AjaxResult handleBusinessException(BusinessException e) {
+    public Result<Void> handleBusinessException(BusinessException e) {
 
         LOGGER.error("业务异常: {}", e.getMessage());
 
-        return AjaxResult.error(e.getCode(), e.getMessage());
+        return Result.error(e.getCode(), e.getMessage());
     }
 
     // 处理权限不足异常 (@PreAuthorize 抛出的)
     @ExceptionHandler(AccessDeniedException.class)
-    public AjaxResult handleAccessDeniedException(AccessDeniedException e) {
+    public Result<Void> handleAccessDeniedException(AccessDeniedException e) {
 
         LOGGER.error("权限异常: {}", e.getMessage());
 
-        return AjaxResult.error(403, "权限不足，请联系管理员");
+        return Result.error(403, "权限不足，请联系管理员");
     }
 
     // 处理认证异常
     @ExceptionHandler(AuthenticationException.class)
-    public AjaxResult handleAuthenticationException(AuthenticationException e) {
+    public Result<Void> handleAuthenticationException(AuthenticationException e) {
 
         LOGGER.error("认证异常: {}", e.getMessage());
 
-        return AjaxResult.error(401, e.getMessage());
+        return Result.error(401, e.getMessage());
     }
 
     // 3. 处理其他未知异常 (防止 500 错误被 Security 掩盖)
     @ExceptionHandler(Exception.class)
-    public AjaxResult handleException(Exception e) {
+    public Result<Void> handleException(Exception e) {
 
         LOGGER.error("系统异常: {}", e.getMessage(), e);
 
-        return AjaxResult.error(500, "系统内部错误");
+        return Result.error(500, "系统内部错误");
     }
 }

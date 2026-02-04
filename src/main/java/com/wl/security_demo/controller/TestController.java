@@ -1,15 +1,20 @@
 package com.wl.security_demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.wl.security_demo.common.AjaxResult;
+import com.wl.security_demo.common.PageResult;
+import com.wl.security_demo.common.Result;
 import com.wl.security_demo.domain.entity.SysUser;
 import com.wl.security_demo.exceptions.BusinessException;
 import com.wl.security_demo.params.LoginUser;
+import com.wl.security_demo.params.OrderParam;
 import com.wl.security_demo.params.RegisterUser;
+import com.wl.security_demo.service.BizOrderService;
 import com.wl.security_demo.service.SysUserService;
 import com.wl.security_demo.utils.JwtUtils;
 import com.wl.security_demo.utils.RedisCacheUtils;
+import com.wl.security_demo.vo.BizOrderVO;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,8 +41,11 @@ public class TestController {
     @Resource
     private SysUserService sysUserService;
 
+    @Resource
+    private BizOrderService bizOrderService;
+
     @PostMapping("/register")
-    public AjaxResult register(@RequestBody RegisterUser registerUser) {
+    public Result<String> register(@RequestBody RegisterUser registerUser) {
         String username = registerUser.getUserName();
         String password = registerUser.getPassword();
 
@@ -46,7 +54,7 @@ public class TestController {
         wrapper.eq(SysUser::getUsername, username);
 
         if (sysUserService.exists(wrapper)) {
-            return AjaxResult.error( 500,  "用户名已存在");
+            return Result.error( 500,  "用户名已存在");
         }
 
         // 2. 【核心】加密密码，绝对不能明文存储
@@ -60,11 +68,11 @@ public class TestController {
         user.setEmail(registerUser.getEmail());
         sysUserService.save(user);
 
-        return AjaxResult.success("注册成功", null);
+        return Result.success("注册成功");
     }
 
     @PostMapping("/login")
-    public AjaxResult login(@RequestBody LoginUser loginParam) {
+    public Result<String> login(@RequestBody LoginUser loginParam) {
         // 1. 验证账号密码
         var authRequest = new UsernamePasswordAuthenticationToken(loginParam.getUsername(), loginParam.getPassword());
         Authentication auth = authenticationManager.authenticate(authRequest);
@@ -78,7 +86,7 @@ public class TestController {
         String token = JwtUtils.createToken(auth.getName(), authorities);
 
         redisCacheUtils.setCacheObjectDefaultExpire(loginParam.getUsername(), token);
-        return AjaxResult.success("登录成功", token);
+        return Result.success(token);
     }
 
     /**
@@ -87,7 +95,7 @@ public class TestController {
      */
     @GetMapping("/user/query")
     @PreAuthorize("hasAuthority('system:user:query') AND hasAnyRole('ADMIN','USER')")
-    public AjaxResult queryUser() {
+    public Result<String> queryUser() {
 
         throw new BusinessException(500,"查询出错了！"); // 错误模拟，依靠全局异常处理器处理，正确抛出异常
 
@@ -99,8 +107,15 @@ public class TestController {
      */
     @DeleteMapping("/user/delete")
     @PreAuthorize("hasRole('ADMIN')  and hasAuthority('system:user:delete')")
-    public AjaxResult deleteUser() {
+    public Result<String> deleteUser() {
 
-        return AjaxResult.success("删除用户成功！", null);
+        return Result.success("删除用户成功！");
+    }
+
+    @PostMapping("/query/order")
+    public Result<PageResult<BizOrderVO>> queryOrder(@RequestBody OrderParam orderParam) {
+
+
+        return Result.success( bizOrderService.queryOrder(orderParam));
     }
 }

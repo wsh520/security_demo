@@ -1,7 +1,7 @@
 package com.wl.security_demo.security;
 
 import com.alibaba.fastjson2.JSON;
-import com.wl.security_demo.common.AjaxResult;
+import com.wl.security_demo.common.Result;
 import com.wl.security_demo.exceptions.GlobalExceptionHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,7 +35,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(200);
 
-        AjaxResult ajaxResult = new AjaxResult(200, "登出成功，请重新登录", null);
-        response.getWriter().write(JSON.toJSONString(ajaxResult));
+        response.getWriter().write(JSON.toJSONString(Result.success("登出成功，请重新登录")));
     }
 }
