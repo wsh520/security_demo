@@ -46,7 +46,7 @@ public class TestController {
         wrapper.eq(SysUser::getUsername, username);
 
         if (sysUserService.exists(wrapper)) {
-            return AjaxResult.error( 400,  "用户名已存在");
+            return AjaxResult.error( 500,  "用户名已存在");
         }
 
         // 2. 【核心】加密密码，绝对不能明文存储
@@ -87,7 +87,7 @@ public class TestController {
      */
     @GetMapping("/user/query")
     @PreAuthorize("hasAuthority('system:user:query') AND hasAnyRole('ADMIN','USER')")
-    public String queryUser() {
+    public AjaxResult queryUser() {
 
         throw new BusinessException(500,"查询出错了！"); // 错误模拟，依靠全局异常处理器处理，正确抛出异常
 
@@ -99,7 +99,8 @@ public class TestController {
      */
     @DeleteMapping("/user/delete")
     @PreAuthorize("hasRole('ADMIN')  and hasAuthority('system:user:delete')")
-    public String deleteUser() {
-        return "删除用户成功！";
+    public AjaxResult deleteUser() {
+
+        return AjaxResult.success("删除用户成功！", null);
     }
 }

@@ -32,7 +32,7 @@ public class CodeGenerator {
                 })
                 // --- 策略配置 (核心) ---
                 .strategyConfig(builder -> {
-                    builder.addInclude("sys_user", "sys_role", "sys_permission","sys_user_role","sys_role_permission"); // 设置需要生成的表名
+                    builder.addInclude("sys_user", "sys_role", "sys_permission","sys_user_role","sys_role_permission","biz_order","sys_dept"); // 设置需要生成的表名
 //                            .addTablePrefix("sys_"); // 设置过滤表前缀 (生成的类名将不包含 sys_)
 
                     // 1. Entity (DO) 策略
@@ -40,18 +40,19 @@ public class CodeGenerator {
                             .enableLombok()             // 开启 Lombok
                             .enableTableFieldAnnotation() // 开启字段注解
                             .logicDeleteColumnName("del_flag") // 逻辑删除字段名
-                            .logicDeletePropertyName("delFlag");
+                            .logicDeletePropertyName("delFlag")
+                            .enableFileOverride();
 
                     // 2. Mapper 策略
                     builder.mapperBuilder()
                             .enableMapperAnnotation()   // 开启 @Mapper 注解
-                            .enableBaseResultMap() ;     // 生成通用的 ResultMap
-//                            .enableBaseColumnList();    // 生成通用的 ColumnList
+                            .enableBaseResultMap()     // 生成通用的 ResultMap
+                            .enableBaseColumnList().enableFileOverride();    // 生成通用的 ColumnList
 
                     // 3. Service 策略 (如不需要可注释掉)
                     builder.serviceBuilder()
                             .formatServiceFileName("%sService") // 格式化 Service 接口文件名称
-                            .formatServiceImplFileName("%sServiceImpl");
+                            .formatServiceImplFileName("%sServiceImpl").enableFileOverride();
 
                     // 4. Controller 策略 (如不需要可注释掉)
 //                    builder.controllerBuilder()

@@ -13,7 +13,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * 
+ * 部门表
  * </p>
  *
  * @author wangl
@@ -21,8 +21,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_permission")
-public class SysPermission implements Serializable {
+@TableName("sys_dept")
+public class SysDept implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -31,50 +31,17 @@ public class SysPermission implements Serializable {
     private Integer id;
 
     /**
-     * 父ID
+     * 父部门ID
      */
     @TableField("pid")
     private Integer pid;
 
     /**
-     * 资源类型（1：菜单，2：按钮，3：操作）
-     */
-    @TableField("type")
-    private Byte type;
-
-    /**
-     * 资源名称
+     * 部门名称
      */
     @TableField("name")
     private String name;
 
-    /**
-     * 资源标识（或者叫权限字符串）
-     */
-    @TableField("code")
-    private String code;
-
-    /**
-     * 资源URI
-     */
-    @TableField("uri")
-    private String uri;
-
-    /**
-     * 序号
-     */
-    @TableField("seq")
-    private Integer seq;
-
-    @TableField("create_user")
-    private String createUser;
-
     @TableField("create_time")
     private LocalDateTime createTime;
-
-    @TableField("update_user")
-    private String updateUser;
-
-    @TableField("update_time")
-    private LocalDateTime updateTime;
 }

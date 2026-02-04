@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -15,13 +17,14 @@ import lombok.Setter;
  * </p>
  *
  * @author wangl
- * @since 2026-02-03
+ * @since 2026-02-04
  */
 @Getter
 @Setter
 @TableName("sys_user")
 public class SysUser implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -68,4 +71,10 @@ public class SysUser implements Serializable {
 
     @TableField("update_time")
     private LocalDateTime updateTime;
+
+    /**
+     * 部门ID
+     */
+    @TableField("dept_id")
+    private Integer deptId;
 }

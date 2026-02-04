@@ -12,6 +12,12 @@
         <result column="create_time" property="createTime" />
         <result column="update_user" property="updateUser" />
         <result column="update_time" property="updateTime" />
+        <result column="data_scope" property="dataScope" />
     </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, role_name, role_code, role_description, create_user, create_time, update_user, update_time, data_scope
+    </sql>
 
 </mapper>

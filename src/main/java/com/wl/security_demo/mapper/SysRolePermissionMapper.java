@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author wangl
- * @since 2026-02-03
+ * @since 2026-02-04
  */
 @Mapper
 public interface SysRolePermissionMapper extends BaseMapper<SysRolePermission> {

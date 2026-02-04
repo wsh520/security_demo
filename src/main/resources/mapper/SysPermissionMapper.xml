@@ -17,4 +17,9 @@
         <result column="update_time" property="updateTime" />
     </resultMap>
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, pid, type, name, code, uri, seq, create_user, create_time, update_user, update_time
+    </sql>
+
 </mapper>

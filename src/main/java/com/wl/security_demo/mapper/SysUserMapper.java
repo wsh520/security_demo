@@ -13,7 +13,7 @@ import java.util.List;
  * </p>
  *
  * @author wangl
- * @since 2026-02-03
+ * @since 2026-02-04
  */
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {

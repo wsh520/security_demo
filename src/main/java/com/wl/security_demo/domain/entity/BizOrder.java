@@ -7,12 +7,13 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * <p>
- * 
+ * 订单业务表
  * </p>
  *
  * @author wangl
@@ -20,8 +21,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_user_role")
-public class SysUserRole implements Serializable {
+@TableName("biz_order")
+public class BizOrder implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -30,14 +31,26 @@ public class SysUserRole implements Serializable {
     private Integer id;
 
     /**
-     * 用户ID
+     * 订单号
+     */
+    @TableField("order_no")
+    private String orderNo;
+
+    /**
+     * 金额
+     */
+    @TableField("amount")
+    private BigDecimal amount;
+
+    /**
+     * 所属部门ID
+     */
+    @TableField("dept_id")
+    private Integer deptId;
+
+    /**
+     * 创建者ID
      */
     @TableField("user_id")
     private Integer userId;
-
-    /**
-     * 角色ID
-     */
-    @TableField("role_id")
-    private Integer roleId;
 }
