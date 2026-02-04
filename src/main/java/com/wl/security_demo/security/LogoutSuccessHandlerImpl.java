@@ -2,7 +2,6 @@ package com.wl.security_demo.security;
 
 import com.alibaba.fastjson2.JSON;
 import com.wl.security_demo.common.Result;
-import com.wl.security_demo.exceptions.GlobalExceptionHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

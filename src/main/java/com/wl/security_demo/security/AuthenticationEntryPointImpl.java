@@ -9,14 +9,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 // 401 未登录处理
 @Component
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
 
         // 使用工具类返回 JSON
         ServletUtils.renderString(response, JSON.toJSONString(Result.error(401, "认证失败，无法访问系统资源")));

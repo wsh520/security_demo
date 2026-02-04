@@ -1,6 +1,5 @@
 package com.wl.security_demo.config;
 
-import com.sun.jdi.PathSearchingVirtualMachine;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
