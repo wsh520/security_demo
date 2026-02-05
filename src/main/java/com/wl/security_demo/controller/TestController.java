@@ -111,6 +111,11 @@ public class TestController {
         return Result.success("删除用户成功！");
     }
 
+    /**
+     *  4. 数据权限接口：订单查询 没做角色和接口权限限制，但做了数据权限限制
+     * @param orderParam
+     * @return
+     */
     @PostMapping("/query/order")
     public Result<PageResult<BizOrderVO>> queryOrder(@RequestBody OrderParam orderParam) {
 
