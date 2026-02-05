@@ -1,19 +1,22 @@
 # 应用服务 WEB 访问端口
 server:
   port: 8080
+
 #logging.level.org.springframework.security=DEBUG
 spring:
+  config:
+    import: optional:classpath:.env[.properties]
   # --- 数据库配置 ---
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.98.104.35:3306/security_permission?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${MYSQL_HOST}:3306/security_permission?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
 
   # --- Redis 配置 ---
   data:
     redis:
-      host: 47.98.104.35
+      host: ${REDIS_HOST}
       port: 6379
       password:  # 如果没有密码留空
       database: 0
