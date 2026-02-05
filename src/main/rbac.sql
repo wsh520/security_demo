@@ -1,18 +1,4 @@
-/*
- Navicat MySQL Data Transfer
 
- Source Server         : 本地
- Source Server Type    : MySQL
- Source Server Version : 50725
- Source Host           : localhost:3306
- Source Schema         : permission
-
- Target Server Type    : MySQL
- Target Server Version : 50725
- File Encoding         : 65001
-
- Date: 07/04/2019 17:51:35
-*/
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -112,8 +98,8 @@ CREATE TABLE `sys_user` (
 -- Records of sys_user
 -- ----------------------------
 BEGIN;
-INSERT INTO security_permission.sys_user (id, username, password, nickname, email, status, create_user, create_time, update_user, update_time) VALUES (1, 'admin', '$2a$10$KLGNptkyLLfeQmy6c.nO4.Pz.cRlHNDxXss1JZPyjVTwhD0tt88BS', '管理员', 'abc@123.com', 1, 'system', '2019-02-12 11:12:19', null, null);
-INSERT INTO security_permission.sys_user (id, username, password, nickname, email, status, create_user, create_time, update_user, update_time) VALUES (2, 'zhangsan', '$2a$10$KLGNptkyLLfeQmy6c.nO4.Pz.cRlHNDxXss1JZPyjVTwhD0tt88BS', '张三', 'zhangsan@126.com', 1, 'system', '2019-02-12 11:13:27', null, null);
+INSERT INTO sys_user (id, username, password, nickname, email, status, create_user, create_time, update_user, update_time) VALUES (1, 'admin', '$2a$10$KLGNptkyLLfeQmy6c.nO4.Pz.cRlHNDxXss1JZPyjVTwhD0tt88BS', '管理员', 'abc@123.com', 1, 'system', '2019-02-12 11:12:19', null, null);
+INSERT INTO sys_user (id, username, password, nickname, email, status, create_user, create_time, update_user, update_time) VALUES (2, 'zhangsan', '$2a$10$KLGNptkyLLfeQmy6c.nO4.Pz.cRlHNDxXss1JZPyjVTwhD0tt88BS', '张三', 'zhangsan@126.com', 1, 'system', '2019-02-12 11:13:27', null, null);
 COMMIT;
 
 -- ----------------------------
@@ -137,3 +123,66 @@ INSERT INTO `sys_user_role` VALUES (3, 2, 2);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- 1. 创建部门表
+DROP TABLE IF EXISTS `sys_dept`;
+CREATE TABLE `sys_dept` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `pid` int(11) DEFAULT 0 COMMENT '父部门ID',
+                            `name` varchar(50) NOT NULL COMMENT '部门名称',
+                            `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
+
+-- 2. 插入部门数据
+BEGIN;
+INSERT INTO `sys_dept` (id, pid, name) VALUES (100, 0, '总公司');
+INSERT INTO `sys_dept` (id, pid, name) VALUES (101, 100, '研发部');
+INSERT INTO `sys_dept` (id, pid, name) VALUES (102, 100, '测试部');
+COMMIT;
+
+-- 1. 为 sys_user 增加 dept_id 并绑定数据
+ALTER TABLE `sys_user` ADD COLUMN `dept_id` int(11) DEFAULT NULL COMMENT '部门ID';
+
+BEGIN;
+-- 管理员 admin 属于总公司 (id:100)
+UPDATE `sys_user` SET `dept_id` = 100 WHERE id = 1;
+-- 用户 zhangsan 属于研发部 (id:101)
+UPDATE `sys_user` SET `dept_id` = 101 WHERE id = 2;
+COMMIT;
+
+
+-- 2. 为 sys_role 增加 data_scope
+ALTER TABLE `sys_role` ADD COLUMN `data_scope` tinyint(4) DEFAULT 1 COMMENT '1:全部, 2:自定义, 3:本部门, 4:本部门及以下, 5:仅本人';
+
+BEGIN;
+-- ADMIN 角色拥有“全部”权限 (1)
+UPDATE `sys_role` SET `data_scope` = 1 WHERE id = 1;
+-- USER 角色拥有“本部门”权限 (3)
+UPDATE `sys_role` SET `data_scope` = 3 WHERE id = 2;
+COMMIT;
+
+
+-- 1. 创建订单业务表
+DROP TABLE IF EXISTS `biz_order`;
+CREATE TABLE `biz_order` (
+                             `id` int(11) NOT NULL AUTO_INCREMENT,
+                             `order_no` varchar(32) NOT NULL COMMENT '订单号',
+                             `amount` decimal(10,2) DEFAULT 0.00 COMMENT '金额',
+                             `dept_id` int(11) NOT NULL COMMENT '所属部门ID',
+                             `user_id` int(11) NOT NULL COMMENT '创建者ID',
+                             PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='订单业务表';
+
+-- 2. 插入对比数据
+BEGIN;
+-- 订单1：总公司的数据（由 admin 创建）
+INSERT INTO `biz_order` VALUES (1, 'ORD_TOTAL_001', 1000.00, 100, 1);
+-- 订单2：研发部的数据（由 zhangsan 创建）
+INSERT INTO `biz_order` VALUES (2, 'ORD_RD_001', 500.00, 101, 2);
+-- 订单3：测试部的数据（由其他虚拟用户创建）
+INSERT INTO `biz_order` VALUES (3, 'ORD_TEST_001', 300.00, 102, 99);
+COMMIT;
+
+
